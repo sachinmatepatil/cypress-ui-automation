@@ -1,28 +1,22 @@
 import {Behave, Given, When, Then, And } from "@badeball/cypress-cucumber-preprocessor";
+import LoginPage from "../../pages/LoginPage";
 
+const loginPage = new LoginPage();
 
-
-Given("Access website", () => {
-  cy.visit("https://webdriveruniversity.com/Login-Portal/index.html");
+Given("Visit login page", () => {
+  loginPage.navigateLogin();
 });
 
-
-When("I enter a username {word}", (userName) => {
-	cy.get("#text").type(userName);
-});
-
-When("I enter a password {word}", (password) => {
-	cy.get('#password').type(password);
-
-});
-
-When("I click on login button", () => {
-  cy.get('#login-button').click();
-});
-
-
-Then("user should be able to login get message {string}", (alertText) => {
-  cy.on("window:alert", (txt) => {
-    expect(txt).to.contains(alertText);
+When("I enter a valid username and password", () => {
+    cy.fixture("user").Then((user) => {
+      loginPage.fillLoginForm(user);
+    });
   });
-});
+
+  Then("I click on login button", () => {
+    loginPage.clickLogin();
+  });
+
+  // Then("user should be able to login and land on dashboard page", () => {
+
+  // });
