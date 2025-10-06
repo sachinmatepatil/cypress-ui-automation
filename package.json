@@ -12,6 +12,7 @@
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^23.2.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.6",
+    "@cucumber/pretty-formatter": "^2.3.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",
     "cypress": "^14.5.4",
