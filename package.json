@@ -4,12 +4,17 @@
   "type": "commonjs",
   "scripts": {
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "test": "npx cypress run",
+    "report": "node generate-html-report.js",
+    "test:report": "npm run test && npm run report"
   },
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^23.2.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.6",
     "cypress": "^14.5.4",
-    "esbuild": "^0.25.10"
+    "cypress-cucumber-preprocessor": "^4.3.1",
+    "esbuild": "^0.25.10",
+    "multiple-cucumber-html-reporter": "^3.9.3"
   }
 }
