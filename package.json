@@ -12,10 +12,15 @@
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^23.2.0",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.6",
+    "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",
     "cypress": "^14.5.4",
     "cypress-cucumber-preprocessor": "^4.3.1",
     "esbuild": "^0.25.10",
-    "multiple-cucumber-html-reporter": "^3.9.3"
+    "multiple-cucumber-html-reporter": "^3.9.3",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.5"
   }
 }
