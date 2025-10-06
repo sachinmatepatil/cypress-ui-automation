@@ -16,39 +16,47 @@ module.exports = defineConfig({
     specPattern: "cypress/e2e/features/**/*.feature",
 
     async setupNodeEvents(on, config) {
-      // 🥒 Enable Cucumber Preprocessor
-      await addCucumberPreprocessorPlugin(on, config);
+   // 🥒 Enable Cucumber Preprocessor
+   await addCucumberPreprocessorPlugin(on, config);
 
-      // ⚙️ Register ESBuild bundler with node-polyfills
-      on(
-        "file:preprocessor",
-        createBundler({
-          plugins: [
-            createEsbuildPlugin(config),
-            {
-              name: "node-polyfills",
-              setup(build) {
-                const polyfills = {
-                  crypto: require.resolve("crypto-browserify"),
-                  stream: require.resolve("stream-browserify"),
-                  buffer: require.resolve("buffer/"),
-                  util: require.resolve("util/"),
-                  process: require.resolve("process/browser"),
-                  path: require.resolve("path-browserify"),
-                };
-
-                for (const [mod, resolvedPath] of Object.entries(polyfills)) {
-                  build.onResolve({ filter: new RegExp(`^${mod}$`) }, () => ({
-                    path: resolvedPath,
-                    namespace: "polyfill",
-                  }));
-                }
-              },
-            },
-          ],
-        })
-      );
-
+   // ⚙️ Register ESBuild bundler + node polyfills
+   on(
+     "file:preprocessor",
+     createBundler({
+       plugins: [
+         createEsbuildPlugin(config),
+ 
+         // ✅ Add Node polyfills for browser
+         {
+           name: "node-polyfills",
+           setup(build) {
+             const polyfills = {
+               crypto: require.resolve("crypto-browserify"),
+               stream: require.resolve("stream-browserify"),
+               buffer: require.resolve("buffer/"),
+               util: require.resolve("util/"),
+               process: require.resolve("process/browser"),
+               path: require.resolve("path-browserify"),
+             };
+ 
+             for (const [mod, resolvedPath] of Object.entries(polyfills)) {
+               build.onResolve({ filter: new RegExp(`^${mod}$`) }, () => ({
+                 path: resolvedPath,
+                 namespace: "polyfill",
+               }));
+             }
+ 
+             // 👇 Inject globals for crypto and buffer
+             build.initialOptions.define = {
+               ...(build.initialOptions.define || {}),
+               global: "window",
+             };
+           },
+         },
+       ],
+     })
+   );
+ 
       // 🧾 Log confirmation after run
       on("after:run", () => {
         console.log("✅ Test run complete. JSON report will be generated under reports/json/");
