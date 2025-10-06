@@ -9,12 +9,17 @@ module.exports = defineConfig({
     chromeWebSecurity: false, //To allow testing sites that load 3rd-party scripts
     specPattern: "cypress/e2e/features/**/*.feature",
     async setupNodeEvents(on, config) {
+       // Enable cucumber preprocessor
       await addCucumberPreprocessorPlugin(on, config); // ✅ no custom stepDefinitions path
 
       on("file:preprocessor", createBundler({
         plugins: [createEsbuildPlugin.default(config)],
       }));
-    
+
+      // ✅ Generate JSON output after run
+      on("after:run", () => {
+        console.log("✅ Test run complete. Cucumber JSON will be generated under /reports/json/");
+      });
 
 
       return config;
@@ -27,4 +32,12 @@ module.exports = defineConfig({
     execTimeout: 12000,
     pageLoadTimeout:24000
   },
+    // ✅ Tell Cypress to save cucumber JSON
+    cucumberJson: {
+      generate: true,
+      outputFolder: "reports/json",
+      filePrefix: "",
+      fileSuffix: ".cucumber",
+      outputFile: "cucumber_report.json"
+    },
 });
