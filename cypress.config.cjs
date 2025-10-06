@@ -1,7 +1,10 @@
 const { defineConfig } = require("cypress");
 const createBundler = require("@bahmutov/cypress-esbuild-preprocessor");
-const { addCucumberPreprocessorPlugin } = require("@badeball/cypress-cucumber-preprocessor");
-const createEsbuildPlugin = require("@badeball/cypress-cucumber-preprocessor/esbuild");
+const {
+  addCucumberPreprocessorPlugin,
+  createEsbuildPlugin,
+} = require("@badeball/cypress-cucumber-preprocessor");
+const path = require("path");
 
 module.exports = defineConfig({
   e2e: {
@@ -27,7 +30,7 @@ module.exports = defineConfig({
           }
         }
       ]
-      
+
       // ✅ Generate JSON output after run
       on("after:run", () => {
         console.log("✅ Test run complete. Cucumber JSON will be generated under /reports/json/");
