@@ -23,6 +23,8 @@ module.exports = defineConfig({
     viewportWidth: 1366,
     viewportHeight: 768,
     video: true,
-    retries: 1
+    retries: 1,
+    execTimeout: 12000,
+    pageLoadTimeout:24000
   },
 });

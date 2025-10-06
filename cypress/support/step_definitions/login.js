@@ -8,7 +8,7 @@ Given("Visit login page", () => {
 });
 
 When("I enter a valid username and password", () => {
-    cy.fixture("user").Then((user) => {
+    cy.fixture("user").then((user) => {
       loginPage.fillLoginForm(user);
     });
   });

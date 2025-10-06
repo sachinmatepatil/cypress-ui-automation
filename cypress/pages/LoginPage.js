@@ -28,3 +28,5 @@ clickLogin(){
 // }
 
 }
+
+export default LoginPage;
