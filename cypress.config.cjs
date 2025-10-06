@@ -16,6 +16,18 @@ module.exports = defineConfig({
         plugins: [createEsbuildPlugin.default(config)],
       }));
 
+      plugins: [
+        createEsbuildPlugin(config),
+        {
+          name: "node-polyfill",
+          setup(build) {
+            build.onResolve({ filter: /^crypto$/ }, () => ({
+              path: require.resolve("crypto-browserify")
+            }));
+          }
+        }
+      ]
+      
       // ✅ Generate JSON output after run
       on("after:run", () => {
         console.log("✅ Test run complete. Cucumber JSON will be generated under /reports/json/");
