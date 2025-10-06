@@ -1,44 +1,68 @@
-name: Cypress BDD Tests with Cucumber Report
+name: 🚀 Run Cypress BDD Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  run-tests:
-    name: Run Cypress Tests (BDD)
+  cypress-run:
+    name: 🧪 Cypress BDD Tests
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1️⃣: Checkout your repository
-      - name: Checkout Repository
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2️⃣: Set up Node.js
-      - name: Set up Node.js
+      # 2️⃣ Setup Node.js (v18 = most stable for Cypress + polyfills)
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      # Step 3️⃣: Install dependencies
-      - name: Install Dependencies
-        run: npm ci
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
 
-      # Step 4️⃣: Run Cypress tests
+      # 4️⃣ Verify Cypress cache and installation
+      - name: Verify Cypress installation
+        run: npx cypress verify
+
+      # 5️⃣ Run Cypress BDD tests in headless mode
       - name: Run Cypress Tests
-        run: npm run test
+        run: npx cypress run --browser chrome
 
-      # Step 5️⃣: Generate Cucumber HTML Report
-      - name: Generate HTML Report
-        run: npm run report
+      # 6️⃣ Generate HTML report from Cucumber JSON
+      - name: Generate Cucumber HTML report
+        if: always()
+        run: |
+          npx cucumber-html-reporter \
+            --theme bootstrap \
+            --jsonFile reports/json/cucumber_report.json \
+            --output reports/html/cucumber_report.html \
+            --reportSuiteAsScenarios true \
+            --launchReport false
 
-      # Step 6️⃣: Upload HTML report as artifact
-      - name: Upload Cucumber HTML Report
+      # 7️⃣ Upload artifacts (reports)
+      - name: Upload test reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-cucumber-report
-          path: reports/html/
+          name: cucumber-html-report
+          path: |
+            reports/html
+            reports/json
+
+      # 8️⃣ Optional: Save Cypress videos/screenshots
+      - name: Upload Cypress videos & screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/videos
+            cypress/screenshots
