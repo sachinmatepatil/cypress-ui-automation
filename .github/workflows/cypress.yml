@@ -1,0 +1,44 @@
+name: Cypress BDD Tests with Cucumber Report
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    name: Run Cypress Tests (BDD)
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1️⃣: Checkout your repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2️⃣: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # Step 3️⃣: Install dependencies
+      - name: Install Dependencies
+        run: npm ci
+
+      # Step 4️⃣: Run Cypress tests
+      - name: Run Cypress Tests
+        run: npm run test
+
+      # Step 5️⃣: Generate Cucumber HTML Report
+      - name: Generate HTML Report
+        run: npm run report
+
+      # Step 6️⃣: Upload HTML report as artifact
+      - name: Upload Cucumber HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-cucumber-report
+          path: reports/html/
